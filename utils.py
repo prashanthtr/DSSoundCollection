@@ -12,5 +12,5 @@ def longSilence(arr,e):
             cnt=0;
     if len(substrLen)==0:
             substrLen.append(cnt)
-    print("max",max(substrLen))
+    #print("max",max(substrLen))
     return max(substrLen)<=len(arr)/2
