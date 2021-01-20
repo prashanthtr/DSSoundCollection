@@ -31,7 +31,8 @@ Select *SegmentDatabase.ipynb* in the browser interface
 
 ## Generate files from commandline
 
-python3 segmentDatabase.py <ChunkDuration> <Format Type>
+python3 segmentDatabase.py ChunkDuration Format_Type
 
 >> Chunkduration: Integer/Float in seconds (e.g., 1 or 1.0)
+
 >> Formattype : 0 or "paramManager", 1 or "sonyGan", 2 or "tfrecords".
