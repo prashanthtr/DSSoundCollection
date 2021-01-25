@@ -14,20 +14,26 @@ fileList = [f for f in os.listdir(datapath) if os.path.isfile(os.path.join(datap
 #stub: fileList = ["silence.wav"]
 
 ''' Chunk duration as specified in arguments'''
-chunkDuration = int(sys.argv[1]); # 1 sec
+chunkDuration = 1 if len(sys.argv) <= 1 else float(sys.argv[1]) # 1 sec
+outType = 0 if len(sys.argv) <= 2 else int(sys.argv[2])
+resampFreq = 22050 if len(sys.argv) <=3 else int(sys.argv[3]) # default 22050hz
+
+outTypeString = ["Params", "SonyGan", "Tfrecords"]
+print("---------------")
+print("Generating files of ", chunkDuration, "seconds with outType of ", outTypeString[outType], " at ", resampFreq, " Hz")
+print("---------------")
 
 ''' Chunk files into Nsecond durations'''
 for fileName in fileList:
 
     sig,sr=librosa.core.load(datapath + "/" + fileName, sr=None)
-    Fs = 22050
 
     # resample
-    sig= librosa.core.resample(sig, sr, 22050) 
+    sig= librosa.core.resample(sig, sr, resampFreq) 
 
     fileBase = os.path.splitext(fileName)[0]
 
-    numSamplesPerChunk = chunkDuration*Fs;
+    numSamplesPerChunk = int(chunkDuration*resampFreq);
     numChunks = math.floor(len(sig)/numSamplesPerChunk)
     segment = []
 
@@ -41,7 +47,7 @@ for fileName in fileList:
             if( longSilence(x, 0.01) ):
                 print(fileBase + " ",  i)
                 norm = librosa.util.normalize(x)
-                sf.write("segmented" + "/" + fileBase + "--" + "v-" + str(i) + ".wav", norm, sr)
+                sf.write("segmented" + "/" + fileBase + "--" + "v-" + str(i) + ".wav", norm, resampFreq)
             else:
                 print("Discarding a silent segment ", i)
             i = i + 1;
@@ -54,11 +60,11 @@ print(sys.argv)
 datapath = 'segmented'
 parampath = 'segmented'
 
-if sys.argv[2] == "sonyGan" or sys.argv[2]=="1":
+if outType == "sonyGan" or outType==1:
     sg = sonyGanJson.SonyGanJson(datapath,"natural",22050,"O'REILLY")
     sg.write2File("sonyGan.json")
 
-elif sys.argv[2] == "paramManager" or sys.argv[2]=="0":
+elif outType == "paramManager" or outType==0:
 
     pm=paramManager.paramManager(datapath,parampath) #filebase is directory name
     pm.initParamFiles(overwrite=True) ##-----------   paramManager  interface ------------------##

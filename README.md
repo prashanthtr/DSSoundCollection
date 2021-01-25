@@ -31,8 +31,10 @@ Select *SegmentDatabase.ipynb* in the browser interface
 
 ## Generate files from commandline
 
-python3 segmentDatabase.py ChunkDuration Format_Type
+python3 segmentDatabase.py ChunkDuration Format_Type ResampleFreq
+ 
+>> Chunkduration: Integer/Float in seconds (e.g., 1 or 1.0). Default: 1second
 
->> Chunkduration: Integer/Float in seconds (e.g., 1 or 1.0)
+>> Formattype : 0( "paramManager"), 1 ("sonyGan"), 2 ("tfrecords"). Default: 0 (param files)
 
->> Formattype : 0 or "paramManager", 1 or "sonyGan", 2 or "tfrecords".
+>> ResampleFreq: Integer, frequency value. (Default, if no argument is given) 22050hz
